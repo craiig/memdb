@@ -1,0 +1,15 @@
+<h1>Temporal Locality Report</h1>
+<h2>How to read these images:</h2>
+<p>Temporal Locality visualizations are meant to give a notion of how much data is reused by each subsequent function call invocation. Temporal locality in the program can be visualized as vertical lines or triangles.</p>
+<p>The first image shows the current temporal locality in the original program. The second image shows temporal locality if one is able to re-order function calls for better temporal locality (i.e. we can reschedule function calls). This tool sorts by the memory addresses accessed in order by each function. <b>If the sorted function image has significantly improved locality (more vertical lines), then the program will likely benefit from re-ordering the accesses. However, it remains a programming challenge to find the right parameter to sort by, because sorting by addresses accessed is usually infeasible.</b></p>
+<ul>
+	<li>y-axis: Different function invocations (Each row is a function call)</li>
+	<li>x-axis: Addresses in the order they appear in the trace. Each column is a unique memory object and is ordered by appearance in the trace. (Adjacent columns are *not* spatially adjacent).</li>
+	<li>Black dots are reads, Red dots are writes</li>
+</ul>
+
+<h2>Original Function Order:</h2>
+<img src="TR.png" border="1" style="border-color: lightgrey;"/>
+
+<h2>Sorted Function Order:</h2>
+<img src="TR-sorted.png" border="1" style="border-color: lightgrey;"/>
