@@ -73,7 +73,8 @@ for line in args.f:
 			raise
 
 #setup jinja2 environment
-helper.env = Environment(loader=FileSystemLoader('templates'))
+template_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')
+helper.env = Environment(loader=FileSystemLoader( template_dir ) ) 
 helper.env.globals['reports'] = []
 
 #generate the reports
