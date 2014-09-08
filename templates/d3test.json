@@ -1,0 +1,7 @@
+var datapoints = [
+	{"x" : 1, "y" : 1, "r" : "1", "name" : "hello world", "color" : "red"},
+	{"x" : 2, "y" : 2, "r" : "1", "name" : "hello world", "color" : "green"},
+	{"x" : 3, "y" : 3, "r" : "1", "name" : "hello world", "color" : "blue"},
+	{"x" : 250, "y" : 250, "r" : "10", "name" : "hello world", "color" : "blue"},
+	{"x" : 400, "y" : 380, "r" : "100", "name" : "hello world", "color" : "pink"},
+]

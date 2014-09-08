@@ -25,7 +25,7 @@ for line in args.f:
 
 		if event == 'function-begin' or event == 'function-end':
 			output['name'] = line.split(":")[1]
-		elif event == 'memory-access'  or event == "allocation ":
+		elif event == 'memory-access'  or event == "allocation":
 			remainder = valid.group(2)
 
 			#build a dictionary out of the values on this line and append it to the output
