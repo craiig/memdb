@@ -19,8 +19,6 @@ class memdb_module:
 		#self.target_stack = helper.args.func.split("::")
 		#self.target_stack_matched = []
 
-		self.regions = dict()
-
 		self.json_file = open(helper.get_path("d3spatial-points.json"), "w")
 		self.json_file.write("var datapoints = [\n")
 		pass

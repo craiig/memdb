@@ -7,6 +7,7 @@ Installation
 =====
  * For HTML templates: `pip install jinja2`
  * For image generation: `pip install pillow`
+ * Requires an internet connection to load D3.
 
 Usage
 =====
