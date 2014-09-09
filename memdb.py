@@ -61,16 +61,34 @@ for importer, modname, ispkg in pkgutil.iter_modules(reports.__path__, prefix):
     #passing output directory and args 
     reports_to_run.append( m.memdb_module(helper) ) 
 
-#parse the input file
+#parse the input file, paying attention to only call the modules in the function of interest
+#we use a couple stacks here to figure out when we're inside the function of interest
+target_stack = helper.args.func.split("::")
+target_stack_matched = []
 print "Parsing input"
 for line in args.f:
 	event = json.loads(line)
-	for r in reports_to_run:
-		try:
+
+	if len(target_stack) > 0 and event['event'] == 'function-begin' and event['name'] == target_stack[0]:
+			#pop from target stack and push to matched stack
+			target_stack_matched.append(target_stack.pop(0))
+			if len(target_stack) == 0:
+				#begun the function
+				for r in reports_to_run:
+					r.enter_target_func(event)
+
+	if len(target_stack_matched) > 0 and event['event'] == 'function-end' and event['name'] == target_stack_matched[-1]:
+		if len(target_stack) == 0:
+			#leaving the function
+			for r in reports_to_run:
+				r.exit_target_func(event)
+
+		#move the function from one stack to the other
+		target_stack.insert(0, target_stack_matched.pop(-1))
+
+	if len(target_stack) == 0:
+		for r in reports_to_run:
 			r.parse_event(event)
-		except Exception, e:
-			print "Error calling parse_event() on report: " +  r.__name__
-			raise
 
 #setup jinja2 environment
 template_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'templates')

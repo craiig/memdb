@@ -12,52 +12,43 @@ class memdb_module:
 	def __init__(self, helper):
 		self.helper = helper #helper is report_helper.py, helps to create proper paths etc
 
-		self.target_stack = helper.args.func.split("::")
-		self.target_stack_matched = []
-
 		self.func_addresses = []  #list containing lists of addresses for each function invocation
 		self.global_order = {} #track the global order of all seen addresses
 
 		self.address_list = [] #list of all addresses the current function has touched
 		self.address_count = OrderedDict() #count of all the times an address has been touched
 
+	def enter_target_func(self, event):
+		pass
+
+	def exit_target_func(self, event):
+		#append current set of addresses to the list
+		self.func_addresses.append(self.address_count) 
+
+		#update the global order
+		for addr in self.address_count:
+			if addr not in self.global_order:
+				pos = len(self.global_order);
+				self.global_order[addr] = pos;
+		#end record tr
+
+		#reset address list
+		self.address_list = []
+		self.address_count = OrderedDict()
+
 	def parse_event(self, event):
-		if len(self.target_stack) > 0 and event['event'] == 'function-begin' and event['name'] == self.target_stack[0]:
-			#pop from target stack and push to matched stack
-			self.target_stack_matched.append(self.target_stack.pop(0))
+		if event["event"] == "memory-access":
+			#addr = mem_access['address']
+			addr = event['region-base'] #best to record region base instead (allocation objects)
+			
+			self.address_list.append( addr )
 
-		if len(self.target_stack_matched) > 0 and event['event'] == 'function-end' and event['name'] == self.target_stack_matched[-1]:
-			if len(self.target_stack) == 0:
-				#append current set of addresses to the list
-				self.func_addresses.append(self.address_count) 
-
-				#update the global order
-				for addr in self.address_count:
-					if addr not in self.global_order:
-						pos = len(self.global_order);
-						self.global_order[addr] = pos;
-				#end record tr
-
-				#reset address list
-				self.address_list = []
-				self.address_count = OrderedDict()
-
-			#move the function from one stack to the other
-			self.target_stack.insert(0, self.target_stack_matched.pop(-1))
-
-		if len(self.target_stack) == 0:
-			if event["event"] == "memory-access":
-				#addr = mem_access['address']
-				addr = event['region-base'] #best to record region base instead (allocation objects)
-				
-				self.address_list.append( addr )
-
-				#append to address map for the current invocation
-				if addr in self.address_count:
-					self.address_count[ addr ]['count'] = self.address_count[ addr ]['count'] + 1
-				else:
-					event['count'] = 1
-					self.address_count[ addr ] = event
+			#append to address map for the current invocation
+			if addr in self.address_count:
+				self.address_count[ addr ]['count'] = self.address_count[ addr ]['count'] + 1
+			else:
+				event['count'] = 1
+				self.address_count[ addr ] = event
 
 	def write_tr_image(self, filename):
 		#if args.keysort:

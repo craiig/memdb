@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <title>D3 Test for Memory Visualization</title>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="d3test.json" charset="utf-8"></script>
+<script src="d3spatial-points.json" charset="utf-8"></script>
 <!-- <script src="d3.v3.min.js" charset="utf-8"></script> -->
 
 <style>
@@ -13,15 +13,23 @@
 }
 </style>
 <body> 
+  <h1>Spatial Locality Report</h1>
+
+  <h2>Original Function Order:</h2>
 	<svg></svg>
-	<p class="selected_details">hi<p>
+  Object Details: <br />
+  <pre class="selected_details">
+    Click an object to see it's details
+  </pre>
 </body>
 
 <script>
 
 //svg parameters
-var width = 800
-var height = 400
+var width_rect = datapoints_x_max - datapoints_x_min;
+var height_rect = datapoints_y_max;
+var width = Math.max(width_rect, 1024)
+var height = Math.max(datapoints_y_max, 600);
 var svg = d3.select("body").select("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -32,23 +40,21 @@ var svg = d3.select("body").select("svg")
 //rect to receive zoom events & border the data pointers
 svg.append("rect") 
     .attr("class", "overlay")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", width_rect)
+    .attr("height", height_rect)
+    .attr("shape-rendering", "optimizeSpeed");
 
 //set up rectangle data points
 var point_group = svg.append("g"); //use a group to differentiate between the rect for the border, and rects for the points
 var c = point_group.selectAll("rect").data(datapoints)
 c.enter().append("rect")
-    .attr("x", function(d){ return d.x })
+    .attr("x", function(d){ return d.x - datapoints_x_min })
     .attr("y", function(d){ return d.y })
-    .attr("cx", function(d){ return d.x })
-    .attr("cy", function(d){ return d.y })
-    .attr("r", function(d){ return d.r })
-    .attr("width", function(d){ return d.r })
-    .attr("height", function(d){ return d.r })
-    .style("fill", function(d){ return d.color })
+    .attr("width", function(d){ return d.width })
+    .attr("height", function(d){ return 1 })
+    .style("fill", function(d){ return d.type == "write" ? "red" : "black" })
     .on("click", function(d){  //set up what happens when someone clicks on a data point
-    		d3.select(".selected_details").text(d.name) 
+    		d3.select(".selected_details").text( JSON.stringify(d.full_info, null, "\t") ) 
     })
 
 c.exit().remove();

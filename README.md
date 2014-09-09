@@ -28,3 +28,18 @@ Todo
  * Interactive visualizations based on D3
  * Support python setup.py?
  * Implement vivid2json.py
+
+
+Trace Format
+====
+The trace format is in JSON, so is very flexible with regards to what can attributes and trace events can be represented and used by an informed tool. Here is an example of each event in the most current outputs that can be used as reference to develop new analysis tools or implement format converters.
+
+The only critical aspect is that each line contain an "event" key, so that all parsers can determine the event type of each line.
+```
+../dump_format.py < quadtree.json 
+{"event": "function-begin", "name": "main"}
+{"alloc-size": "80", "alloc-base": "0xcb3010", "type": "malloc", "event": "allocation", "alloc-tag": "1"}
+{"function": "_ZN14brandonpelfrey8QuadtreeC1ERK4Vec2S3_", "region-base": "0xcb3010", "pc": "0x40231b", "region-size": "80", "address": "0xcb3010", "type": "write", "event": "memory-access", "region-tag": "1"}
+{"event": "function-end", "name": "main"}
+
+```
