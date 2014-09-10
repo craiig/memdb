@@ -69,6 +69,9 @@ print "Parsing input"
 for line in args.f:
 	event = json.loads(line)
 
+	for r in reports_to_run:
+		r.parse_all_events(event)
+
 	if len(target_stack) > 0 and event['event'] == 'function-begin' and event['name'] == target_stack[0]:
 			#pop from target stack and push to matched stack
 			target_stack_matched.append(target_stack.pop(0))

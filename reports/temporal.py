@@ -18,6 +18,9 @@ class memdb_module:
 		self.address_list = [] #list of all addresses the current function has touched
 		self.address_count = OrderedDict() #count of all the times an address has been touched
 
+	def parse_all_events(self, event):
+		pass
+
 	def enter_target_func(self, event):
 		pass
 
@@ -131,5 +134,5 @@ class memdb_module:
 		template = self.helper.env.get_template("spatial.html")
 		open(self.helper.get_path("spatial.html"), "w").write(template.render())
 
-		return [{"url" : "temporal.html", "title": "Temporal Locality"}, {"url" : "spatial.html", "title": "Spatial Locality"}]
+		return [{"url" : "temporal.html", "title": "Temporal Locality (Static)"}, {"url" : "spatial.html", "title": "Spatial Locality (Static)"}]
 

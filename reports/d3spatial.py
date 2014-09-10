@@ -23,6 +23,9 @@ class memdb_module:
 		self.json_file.write("var datapoints = [\n")
 		pass
 
+	def parse_all_events(self, event):
+		pass
+
 	def enter_target_func(self, event):
 		pass
 
