@@ -1,0 +1,17 @@
+<a href="index.html">Back to Main</a>
+<h1>Spatial Locality Report</h1>
+<h2>How to read these images:</h2>
+<p>Spatial Locality visualizations are meant to give a notion of how well each function call uses data that is adjacent in memory (as well as temporal locality, i.e. how well subsequent functions use the same memory). Spatial locality can be visualized as vertical or horizontal lines in these images.</p>
+
+<p>The first image shows the current spatial locality in the original program. The second image shows spatial locality if one is able to re-order function calls for better spatial locality (i.e. we can reschedule function calls). This tool sorts by the memory addresses accessed in order by each function. <b>If the sorted function image has significantly improved locality (more vertical lines), then the program will likely benefit from re-ordering the function calls. However, it remains a programming challenge to find the right parameter to sort by, because sorting by addresses accessed is usually infeasible.</b></p>
+<ul>
+	<li>y-axis: Different function invocations (Each row is a function call)</li>
+	<li>x-axis: Addresses in the order they are allocated in memory. (Adjacent columns are adjacent in memory)</li>
+	<li>Black dots are reads, Red dots are writes</li>
+</ul>
+
+<h2>Original Function Order:</h2>
+<img src="SL.png" border="1" style="border-color: lightgrey;"/>
+
+<h2>Sorted Function Order:</h2>
+<img src="SL-sorted.png" border="1" style="border-color: lightgrey;"/>
