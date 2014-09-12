@@ -30,10 +30,10 @@ Building Examples
 ====
 Sometimes you just want to see how things are supposed to work:
 
-{{{
+```
 	cd test/
 	make clean all
-}}}
+```
 
 Todo
 ====
