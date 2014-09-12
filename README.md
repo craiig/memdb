@@ -33,6 +33,7 @@ Todo
  * Implement vivid2json.py
  * Visualize un-accessed allocations
  * Improve description of spatial locality d3 visualization
+ * Improve pintools to capture/print file:line, function entrance
 
 
 Trace Format
@@ -43,8 +44,8 @@ The only critical aspect is that each line contain an "event" key, so that all p
 ```
 ../dump_format.py < quadtree.json 
 {"event": "function-begin", "name": "main"}
-{"alloc-size": "80", "alloc-base": "0xcb3010", "type": "malloc", "event": "allocation", "alloc-tag": "1"}
-{"function": "_ZN14brandonpelfrey8QuadtreeC1ERK4Vec2S3_", "region-base": "0xcb3010", "pc": "0x40231b", "region-size": "80", "address": "0xcb3010", "type": "write", "event": "memory-access", "region-tag": "1"}
+{"event": "allocation", "alloc-size": "80", "alloc-base": "0xcb3010", "type": "malloc", "alloc-tag": "1"}
+{ "event": "memory-access", "function": "_ZN14brandonpelfrey8QuadtreeC1ERK4Vec2S3_", "region-base": "0xcb3010", "pc": "0x40231b", "region-size": "80", "address": "0xcb3010", "type": "write", "region-tag": "1"}
 {"event": "function-end", "name": "main"}
 
 ```
