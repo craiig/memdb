@@ -26,6 +26,14 @@ Usage
 7. Make thoughtful changes to your program.
 8. Go to step 1.
 
+Building Examples
+====
+Sometimes you just want to see how things are supposed to work:
+{{{
+	cd test/
+	make clean all
+}}}
+
 Todo
 ====
  * Better looking HTML reports (Bootstrap?)
