@@ -45,7 +45,7 @@ The only critical aspect is that each line contain an "event" key, so that all p
 ../dump_format.py < quadtree.json 
 {"event": "function-begin", "name": "main"}
 {"event": "allocation", "alloc-size": "80", "alloc-base": "0xcb3010", "type": "malloc", "alloc-tag": "1"}
-{ "event": "memory-access", "function": "_ZN14brandonpelfrey8QuadtreeC1ERK4Vec2S3_", "region-base": "0xcb3010", "pc": "0x40231b", "region-size": "80", "address": "0xcb3010", "type": "write", "region-tag": "1"}
+{"event": "memory-access", "function": "_ZN14brandonpelfrey8QuadtreeC1ERK4Vec2S3_", "region-base": "0xcb3010", "pc": "0x40231b", "region-size": "80", "address": "0xcb3010", "type": "write", "region-tag": "1"}
 {"event": "function-end", "name": "main"}
 
 ```
