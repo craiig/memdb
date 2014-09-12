@@ -3,6 +3,8 @@ memdb
 
 a memory debugging &amp; visualization toolkit
 
+Lots of programs have logically correct behavior, but suffer from issues relating to the memory system of the machines that cause unnecessary performance bottlenecks. For instance, badly ordered memory allocations can limit the data locality of a program, or variables that are shared poorly across threads will limit parallel scalability. This tool is designed to let a programmer diagnose and fix memory related performance issues.
+
 Installation
 =====
  * For HTML templates: `pip install jinja2`

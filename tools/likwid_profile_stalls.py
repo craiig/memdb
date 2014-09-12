@@ -32,14 +32,15 @@ def run_cmd(cmd):
 			csv_start = True
 		print r
 
-stall_data = []
-for profile_cmd in profile_cmds:
-	for i in range(repeat_count):
-		cmd = profile_cmd + " " + " ".join(sys.argv[1:])
-		for l in run_cmd(cmd):
-			stall_data.append(l.split(","))
+#stall_data = []
+#for profile_cmd in profile_cmds:
+#	for i in range(repeat_count):
+#		cmd = profile_cmd + " " + " ".join(sys.argv[1:])
+#		for l in run_cmd(cmd):
+#			stall_data.append(l.split(","))
 
+stall_data = [['DISPATCH_STALLS_SERIAL', '12418.000000', '0.000000'], ['DISPATCH_STALLS_SEGMENT_LOAD', '47211.000000', '0.000000'], ['DISPATCH_STALLS_ROB_FULL', '271315.000000', '0.000000'], ['DISPATCH_STALLS_RES_FULL', '2321654.000000', '0.000000'], ['DISPATCH_STALLS_FPU_FULL', '0.000000', '0.000000'], ['DISPATCH_STALLS_LS_FULL', '6286497.000000', '0.000000'], ['DISPATCH_STALLS_ALL_QUIT', '23370.000000', '0.000000'], ['DISPATCH_STALLS_DRAIN', '3924.000000', '0.000000'], ['DISPATCH_STALLS_BRANCH', '333656.000000', '0.000000']]
 print "*" * 80
 print stall_data
 
-stall_data = [['DISPATCH_STALLS_SERIAL', '12418.000000', '0.000000'], ['DISPATCH_STALLS_SEGMENT_LOAD', '47211.000000', '0.000000'], ['DISPATCH_STALLS_ROB_FULL', '271315.000000', '0.000000'], ['DISPATCH_STALLS_RES_FULL', '2321654.000000', '0.000000'], ['DISPATCH_STALLS_FPU_FULL', '0.000000', '0.000000'], ['DISPATCH_STALLS_LS_FULL', '6286497.000000', '0.000000'], ['DISPATCH_STALLS_ALL_QUIT', '23370.000000', '0.000000'], ['DISPATCH_STALLS_DRAIN', '3924.000000', '0.000000'], ['DISPATCH_STALLS_BRANCH', '333656.000000', '0.000000']]
+
