@@ -2,7 +2,7 @@
 
 # this tool drives the generation of a report, based on the scripts included in reports/
 
-import argparse, sys, json, os
+import argparse, sys, json, os, gzip
 import pkgutil, inspect, reports
 import report_helper
 from jinja2 import Environment, FileSystemLoader
@@ -15,6 +15,16 @@ parser.add_argument('-func', help="function of interest", type=str)
 #parser.add_argument('-d', help="debug the parser", action="store_true", default=False)
 arg_source = sys.argv[1:]
 args = parser.parse_args(arg_source)
+
+#test for GZIP'd file input
+#gzip won't tell you if it's a gzipped file until you start to read
+gzip_file = gzip.GzipFile(fileobj=args.f)
+try:
+	gzip_file.read(1)
+	args.f = gzip_file
+except IOError as e:
+	pass
+args.f.seek(0)
 
 #check to see if a function was specified
 if not args.func:
