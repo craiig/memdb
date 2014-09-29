@@ -42,18 +42,17 @@ class memdb_module:
 	#		"event": "memory-access", 
 	#		"region-tag": "1"
 	#	}
-
 		if event['event'] == "memory-access":
-			int_addr = float(int(event['region-base'], 0)) / 64
+			int_addr = float(int(event['region-base'], 0))
 			if self.cur_x_min:
 				self.cur_x_min = min(self.cur_x_min, int_addr)
 			else:
 				self.cur_x_min = int_addr
 
 			if self.cur_x_max:
-				self.cur_x_max = max(self.cur_x_max, int_addr + float(event['region-size']) /64 )
+				self.cur_x_max = max(self.cur_x_max, int_addr + float(event['region-size']) )
 			else:
-				self.cur_x_max = int_addr + float(event['region-size']) / 64
+				self.cur_x_max = int_addr + float(event['region-size'])
 
 			#if int_addr not in self.regions:
 			#	self.regions[int_addr] = len(self.regions)
@@ -65,7 +64,7 @@ class memdb_module:
 			point = dict()
 			point['x'] = int_addr
 			point['y'] = self.func_count
-			point['width'] = float(event['region-size']) / 64
+			point['width'] = float(event['region-size'])
 			point['type'] = event['type']
 			point['full_info'] = event
 

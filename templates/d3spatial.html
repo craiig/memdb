@@ -2,6 +2,7 @@
 <title>D3 Test for Memory Visualization</title>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="d3spatial-points.json" charset="utf-8"></script>
+<script src="d3allocations.json" charset="utf-8"></script>
 <!-- <script src="d3.v3.min.js" charset="utf-8"></script> -->
 
 <style>
@@ -56,8 +57,9 @@ var height_rect = datapoints_y_max;
 var width = Math.max(width_rect, 1024)
 var height = Math.max(datapoints_y_max, 400);
 
+var scale_factor = 64; //scale everything by 64 so 1 pixel = 1 cache line, and it's easier to read
 
-function render_spatial(div_selector, data){
+function build_svg(div_selector){
   // render spatial locality SVG
   var zoom = function(){
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -67,23 +69,30 @@ function render_spatial(div_selector, data){
     //.attr("width", width)
     .attr("height", height)
     .append("g")
-      .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+      .call(d3.behavior.zoom().scaleExtent([1/4, scale_factor]).on("zoom", zoom))
     .append("g");
 
   //rect to receive zoom events & border the data pointers
   svg.append("rect") 
       .attr("class", "overlay")
-      .attr("width", width_rect)
+      .attr("width", width_rect / scale_factor)
       .attr("height", height_rect)
-      .attr("shape-rendering", "optimizeSpeed");
+      .attr("shape-rendering", "optimizeSpeed"); 
 
+  return svg;
+}
+
+
+function render_spatial(div_selector, svg, data){
+  var div = d3.select("body").select(div_selector);
+  //var svg = div.select(".visualization").select("svg");
   //set up rectangle data points
   var point_group = svg.append("g"); //use a group to differentiate between the rect for the border, and rects for the points
   var c = point_group.selectAll("rect").data(data)
   c.enter().append("rect")
-      .attr("x", function(d){ return d.x - datapoints_x_min })
+      .attr("x", function(d){ return (d.x - datapoints_x_min) /scale_factor }) //scale the x by 64 so it's easier to view
       .attr("y", function(d){ return d.y })
-      .attr("width", function(d){ return d.width })
+      .attr("width", function(d){ return d.width/scale_factor })
       .attr("height", function(d){ return 1 })
       .style("fill", function(d){ return d.type == "write" ? "red" : "black" })
       .on("click", function(d){  //set up what happens when someone clicks on a data point
@@ -93,7 +102,28 @@ function render_spatial(div_selector, data){
   c.exit().remove();
 }
 
-render_spatial("#original", datapoints)
+function render_allocations(div_selector, svg, allocations){
+  var div = d3.select("body").select(div_selector);
+  //var svg = div.select(".visualization").select("svg");
+  var alloc_group = svg.append("g");
+  var c = alloc_group.selectAll("rect").data(allocations);
+  c.exit().remove()
+  c.enter().append("rect")
+    .attr("x", function(d){ return (d['alloc-base-int'] - datapoints_x_min) / scale_factor })
+    .attr("y", function(d){ return 0; })
+    .attr("height", datapoints_y_max )
+    .attr("width", function(d){ return d['alloc-size'] / scale_factor })
+    .style("fill", function(d, i){ return i % 2 == 0 ? "pink" : "salmon"} )
+    .on("click", function(d){  //set up what happens when someone clicks on a data point
+          div.select(".selected_details").text( JSON.stringify(d, null, "\t") ) 
+      })
+
+}
+
+svg = build_svg("#original");
+render_allocations("#original", svg, allocations); //from json file
+render_spatial("#original", svg, datapoints); //from json file
+
 
 //apply sorting to display the sorted image
 var func2sort = [];
@@ -120,7 +150,8 @@ for(var i=0; i<func2sort.length; i++){
   function_remap[ func2sort[i].orig_y] = i;
 }
 
-render_spatial("#sorted", datapoints.map(function(p){
+svg = build_svg("#sorted");
+render_spatial("#sorted", svg, datapoints.map(function(p){
   p.y = function_remap[p.y];
   return p;
 }))
