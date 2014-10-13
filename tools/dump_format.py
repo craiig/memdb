@@ -12,7 +12,8 @@ for line in f:
 	event = json.loads(line)
 
 	if event['event'] not in events:
+		print json.dumps(event)
 		events[event['event']] = event
 
-for (k,v) in events.iteritems():
-	print json.dumps(v)
+#for (k,v) in events.iteritems():
+	#print json.dumps(v)

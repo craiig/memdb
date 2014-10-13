@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-#each memdb module should provide a number of functions that will be called arbitrarily by the generator
-#this file is an example of all the things a module can do
+#print allocations that are unique
+#also collect stats on shared/not shared objects
 
 from collections import OrderedDict
 from PIL import Image
@@ -33,7 +33,9 @@ class memdb_module:
 		pass
 
 	def parse_event(self, event):
+		#code below assumes accesses provide their allocation region
 		if event['event'] == 'memory-access':
+
 			if event['region-base'] in self.allocations:
 				alloc = self.allocations[event['region-base']]
 				
@@ -59,6 +61,6 @@ class memdb_module:
 			if a['write'] > 0:
 				written_allocs = written_allocs + 1
 
-		#print "total allocs: %d unused allocs: %d read allocs: %d written allocs: %d" % (len(self.allocations), unused_allocs, read_allocs, written_allocs)
+		print "total allocs: %d unused allocs: %d read allocs: %d written allocs: %d" % (len(self.allocations), unused_allocs, read_allocs, written_allocs)
 
 		pass
